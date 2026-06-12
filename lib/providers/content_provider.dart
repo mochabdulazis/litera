@@ -50,9 +50,24 @@ class ContentProvider extends ChangeNotifier {
 
   void _fetchContinueReading() {
     if (_contentBox.isNotEmpty) {
-      _continueReadingContent = _contentBox.values.first;
+      final list = _contentBox.values.where((c) => c.lastReadTimestamp > 0).toList();
+      if (list.isNotEmpty) {
+        list.sort((a, b) => b.lastReadTimestamp.compareTo(a.lastReadTimestamp));
+        _continueReadingContent = list.first;
+      } else {
+        _continueReadingContent = _contentBox.values.first; // Fallback for new users
+      }
+    } else {
+      _continueReadingContent = null;
     }
     notifyListeners();
+  }
+
+  void updateReadingProgress(Content content, int page) {
+    content.lastReadPage = page;
+    content.lastReadTimestamp = DateTime.now().millisecondsSinceEpoch;
+    content.save();
+    _fetchContinueReading(); // This updates the UI automatically
   }
 
   List<Content> getContentsByType(String type) {

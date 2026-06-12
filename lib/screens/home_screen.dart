@@ -4,7 +4,6 @@ import '../providers/content_provider.dart';
 import 'category_screen.dart';
 import 'reader_screen.dart';
 import '../models/content.dart';
-import '../widgets/flourish_divider.dart';
 import '../widgets/ribbon_bookmark.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -222,7 +221,12 @@ class _HomeView extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 32),
-          const FlourishDivider(),
+          Divider(
+            color: const Color(0xFF483F29).withOpacity(0.15),
+            thickness: 1,
+            indent: 32,
+            endIndent: 32,
+          ),
           const SizedBox(height: 24),
           const Padding(
             padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -296,6 +300,16 @@ class _ContinueReadingFloating extends StatelessWidget {
                 const Text("CONTINUE READING", style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF7A774A), letterSpacing: 0.5)),
                 const SizedBox(height: 2),
                 Text(content.title, style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF483F29), fontSize: 14), maxLines: 1, overflow: TextOverflow.ellipsis),
+                const SizedBox(height: 6),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(2),
+                  child: LinearProgressIndicator(
+                    value: content.imagePages.length > 1 ? content.lastReadPage / (content.imagePages.length - 1) : 0,
+                    backgroundColor: const Color(0xFFA1AFB8).withOpacity(0.3),
+                    color: const Color(0xFF7A774A),
+                    minHeight: 4,
+                  ),
+                ),
               ],
             ),
           ),

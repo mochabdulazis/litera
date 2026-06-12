@@ -22,7 +22,13 @@ class _ReaderScreenState extends State<ReaderScreen> {
     super.initState();
     PaintingBinding.instance.imageCache.maximumSize = 50; 
     PaintingBinding.instance.imageCache.maximumSizeBytes = 50 << 20; // 50 MB limits
-    _pageController = PageController();
+    _pageController = PageController(initialPage: widget.content.lastReadPage);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<ContentProvider>().updateReadingProgress(widget.content, widget.content.lastReadPage);
+      }
+    });
   }
 
   @override
@@ -92,6 +98,9 @@ class _ReaderScreenState extends State<ReaderScreen> {
             PageView.builder(
               controller: _pageController,
               itemCount: widget.content.imagePages.length,
+              onPageChanged: (index) {
+                context.read<ContentProvider>().updateReadingProgress(widget.content, index);
+              },
               itemBuilder: (context, index) {
                 return _OptimizedReaderImage(imagePath: widget.content.imagePages[index]);
               },
@@ -131,6 +140,9 @@ class _ReaderScreenState extends State<ReaderScreen> {
             controller: _pageController,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: widget.content.imagePages.length,
+            onPageChanged: (index) {
+              context.read<ContentProvider>().updateReadingProgress(widget.content, index);
+            },
             itemBuilder: (context, index) {
                return _OptimizedReaderImage(imagePath: widget.content.imagePages[index]);
             },
