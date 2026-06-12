@@ -74,6 +74,14 @@ class ContentProvider extends ChangeNotifier {
     return _contentBox.values.where((c) => c.type == type).toList();
   }
 
+  List<Content> searchContent(String query) {
+    if (query.trim().isEmpty) return [];
+    final lowerQuery = query.toLowerCase();
+    return _contentBox.values.where((c) {
+      return c.title.toLowerCase().contains(lowerQuery) || c.authorName.toLowerCase().contains(lowerQuery);
+    }).toList();
+  }
+
   void toggleFavorite(Content content) {
     content.isFavorite = !content.isFavorite;
     content.save();

@@ -5,6 +5,7 @@ import 'category_screen.dart';
 import 'reader_screen.dart';
 import '../models/content.dart';
 import '../widgets/ribbon_bookmark.dart';
+import '../widgets/search_modal.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -53,16 +54,6 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         letIndexChange: (index) => true,
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
-        transitionBuilder: (Widget child, Animation<double> animation) {
-          return FadeTransition(opacity: animation, child: child);
-        },
-        child: _currentIndex == 0
-            ? const _ContinueReadingFloating(key: ValueKey('continue_reading_widget'))
-            : const SizedBox.shrink(key: ValueKey('empty_widget')),
-      ),
     );
   }
 
@@ -105,13 +96,32 @@ class _HomeView extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.search, color: Color(0xFF483F29)),
-            onPressed: () {},
+            onPressed: () {
+              showGeneralDialog(
+                context: context,
+                barrierDismissible: true,
+                barrierLabel: "SearchModal",
+                barrierColor: Colors.transparent, // Custom BackdropFilter handles color
+                transitionDuration: const Duration(milliseconds: 300),
+                pageBuilder: (context, animation, secondaryAnimation) {
+                  return const SearchModal();
+                },
+                transitionBuilder: (context, animation, secondaryAnimation, child) {
+                  return FadeTransition(opacity: animation, child: child);
+                },
+              );
+            },
           )
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.only(bottom: 120),
+        padding: const EdgeInsets.only(bottom: 120, top: 16),
         children: [
+          if (provider.continueReadingContent != null)
+            const Padding(
+              padding: EdgeInsets.only(bottom: 24),
+              child: _ContinueReadingFloating(key: ValueKey('continue_reading_widget')),
+            ),
           const Padding(
             padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
             child: Text("For You", style: TextStyle(fontFamily: 'Serif', fontSize: 22, color: Color(0xFF483F29))),
