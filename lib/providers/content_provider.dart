@@ -55,7 +55,7 @@ class ContentProvider extends ChangeNotifier {
         list.sort((a, b) => b.lastReadTimestamp.compareTo(a.lastReadTimestamp));
         _continueReadingContent = list.first;
       } else {
-        _continueReadingContent = _contentBox.values.first; // Fallback for new users
+        _continueReadingContent = null; // Don't show if user hasn't read anything
       }
     } else {
       _continueReadingContent = null;
