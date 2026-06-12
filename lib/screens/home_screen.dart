@@ -102,12 +102,20 @@ class _HomeView extends StatelessWidget {
                 barrierDismissible: true,
                 barrierLabel: "SearchModal",
                 barrierColor: Colors.transparent, // Custom BackdropFilter handles color
-                transitionDuration: const Duration(milliseconds: 300),
+                transitionDuration: const Duration(milliseconds: 400),
                 pageBuilder: (context, animation, secondaryAnimation) {
                   return const SearchModal();
                 },
                 transitionBuilder: (context, animation, secondaryAnimation, child) {
-                  return FadeTransition(opacity: animation, child: child);
+                  final curvedAnimation = CurvedAnimation(parent: animation, curve: Curves.easeOutCubic);
+                  return ScaleTransition(
+                    alignment: const Alignment(0.8, -0.8), // Titik asal animasi (di sekitar ikon pencarian)
+                    scale: Tween<double>(begin: 0.0, end: 1.0).animate(curvedAnimation),
+                    child: FadeTransition(
+                      opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
+                      child: child,
+                    ),
+                  );
                 },
               );
             },
