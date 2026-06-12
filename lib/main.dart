@@ -58,10 +58,15 @@ class LiteraApp extends StatelessWidget {
           children: [
             Container(color: const Color(0xFFDFD7C7)), // Base fallback color
             Positioned.fill(
-              child: Image.asset(
-                'assets/images/paper_texture.jpg',
-                repeat: ImageRepeat.repeat,
-                errorBuilder: (c, e, s) => const SizedBox.shrink(),
+              child: Opacity(
+                opacity: 0.4,
+                child: Image.asset(
+                  'assets/images/paper_texture.jpg',
+                  repeat: ImageRepeat.repeat,
+                  color: const Color(0xFFDFD7C7),
+                  colorBlendMode: BlendMode.multiply,
+                  errorBuilder: (c, e, s) => const SizedBox.shrink(),
+                ),
               ),
             ),
             if (child != null) child,
