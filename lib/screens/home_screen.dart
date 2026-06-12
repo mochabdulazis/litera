@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/content_provider.dart';
@@ -108,11 +109,19 @@ class _HomeView extends StatelessWidget {
                 },
                 transitionBuilder: (context, animation, secondaryAnimation, child) {
                   final curvedAnimation = CurvedAnimation(parent: animation, curve: Curves.easeOutCubic);
-                  return ScaleTransition(
-                    alignment: const Alignment(0.8, -0.8), // Titik asal animasi (di sekitar ikon pencarian)
-                    scale: Tween<double>(begin: 0.0, end: 1.0).animate(curvedAnimation),
+                  return AnimatedBuilder(
+                    animation: curvedAnimation,
+                    builder: (context, childWidget) {
+                      return ClipPath(
+                        clipper: CircularRevealClipper(
+                          fraction: curvedAnimation.value,
+                          center: Offset(MediaQuery.of(context).size.width - 40, 50), // Position of search icon
+                        ),
+                        child: childWidget,
+                      );
+                    },
                     child: FadeTransition(
-                      opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
+                      opacity: CurvedAnimation(parent: animation, curve: Curves.easeIn),
                       child: child,
                     ),
                   );
@@ -310,5 +319,31 @@ class _ContinueReadingFloating extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class CircularRevealClipper extends CustomClipper<Path> {
+  final double fraction;
+  final Offset center;
+
+  CircularRevealClipper({required this.fraction, required this.center});
+
+  @override
+  Path getClip(Size size) {
+    final maxRadius = _calcMaxRadius(size, center);
+    final path = Path();
+    path.addOval(Rect.fromCircle(center: center, radius: maxRadius * fraction));
+    return path;
+  }
+
+  double _calcMaxRadius(Size size, Offset center) {
+    final dx = math.max(center.dx, size.width - center.dx);
+    final dy = math.max(center.dy, size.height - center.dy);
+    return math.sqrt(dx * dx + dy * dy);
+  }
+
+  @override
+  bool shouldReclip(covariant CircularRevealClipper oldClipper) {
+    return fraction != oldClipper.fraction || center != oldClipper.center;
   }
 }
