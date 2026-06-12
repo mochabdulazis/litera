@@ -4,6 +4,8 @@ import '../providers/content_provider.dart';
 import 'category_screen.dart';
 import 'reader_screen.dart';
 import '../models/content.dart';
+import '../widgets/flourish_divider.dart';
+import '../widgets/ribbon_bookmark.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -189,6 +191,12 @@ class _HomeView extends StatelessWidget {
                                     ),
                                   ),
                                 ),
+                                if (content.isFavorite)
+                                  const Positioned(
+                                    top: -2,
+                                    right: 16,
+                                    child: RibbonBookmark(),
+                                  ),
                               ],
                             ),
                           ),
@@ -214,12 +222,7 @@ class _HomeView extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 32),
-          Divider(
-            color: const Color(0xFF483F29).withOpacity(0.15),
-            thickness: 1,
-            indent: 32,
-            endIndent: 32,
-          ),
+          const FlourishDivider(),
           const SizedBox(height: 24),
           const Padding(
             padding: EdgeInsets.fromLTRB(16, 0, 16, 16),

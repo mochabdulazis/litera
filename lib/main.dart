@@ -27,7 +27,7 @@ class LiteraApp extends StatelessWidget {
       title: 'LITERA',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: const Color(0xFFDFD7C7),
+        scaffoldBackgroundColor: Colors.transparent,
         primaryColor: const Color(0xFF483F29),
         colorScheme: const ColorScheme.light(
           primary: Color(0xFF483F29),
@@ -39,6 +39,21 @@ class LiteraApp extends StatelessWidget {
           bodyMedium: TextStyle(fontFamily: 'Sans-Serif', color: Color(0xFF483F29)),
         ),
       ),
+      builder: (context, child) {
+        return Stack(
+          children: [
+            Container(color: const Color(0xFFDFD7C7)), // Base fallback color
+            Positioned.fill(
+              child: Image.asset(
+                'assets/images/paper_texture.jpg',
+                repeat: ImageRepeat.repeat,
+                errorBuilder: (c, e, s) => const SizedBox.shrink(),
+              ),
+            ),
+            if (child != null) child,
+          ],
+        );
+      },
       home: const HomeScreen(),
     );
   }

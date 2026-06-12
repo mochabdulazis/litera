@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/content_provider.dart';
 import 'reader_screen.dart';
+import '../widgets/ribbon_bookmark.dart';
 
 class CategoryListScreen extends StatelessWidget {
   final String type;
@@ -39,8 +40,19 @@ class CategoryListScreen extends StatelessWidget {
                 Expanded(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: Image.asset(content.coverPath, width: double.infinity, fit: BoxFit.cover,
-                        errorBuilder: (c, e, s) => Container(width: double.infinity, color: Colors.grey)),
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        Image.asset(content.coverPath, fit: BoxFit.cover,
+                            errorBuilder: (c, e, s) => Container(color: Colors.grey)),
+                        if (content.isFavorite)
+                          const Positioned(
+                            top: -2,
+                            right: 12,
+                            child: RibbonBookmark(),
+                          ),
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(height: 8),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/content.dart';
+import '../providers/content_provider.dart';
 
 enum ReadingMode { webtoon, book, slide, tap }
 
@@ -46,6 +48,13 @@ class _ReaderScreenState extends State<ReaderScreen> {
         elevation: 0,
         title: Text(widget.content.title, style: const TextStyle(color: Colors.white, fontSize: 16)),
         actions: [
+          IconButton(
+            icon: Icon(widget.content.isFavorite ? Icons.bookmark : Icons.bookmark_border, color: Colors.white),
+            onPressed: () {
+              context.read<ContentProvider>().toggleFavorite(widget.content);
+              setState(() {}); // refresh UI to show filled bookmark
+            },
+          ),
           PopupMenuButton<ReadingMode>(
             icon: const Icon(Icons.settings),
             onSelected: _changeMode,
@@ -78,12 +87,34 @@ class _ReaderScreenState extends State<ReaderScreen> {
         );
       case ReadingMode.book:
       case ReadingMode.slide:
-        return PageView.builder(
-          controller: _pageController,
-          itemCount: widget.content.imagePages.length,
-          itemBuilder: (context, index) {
-            return _OptimizedReaderImage(imagePath: widget.content.imagePages[index]);
-          },
+        return Stack(
+          children: [
+            PageView.builder(
+              controller: _pageController,
+              itemCount: widget.content.imagePages.length,
+              itemBuilder: (context, index) {
+                return _OptimizedReaderImage(imagePath: widget.content.imagePages[index]);
+              },
+            ),
+            // Book Spine Shadow Overlay
+            Positioned(
+              left: 0,
+              top: 0,
+              bottom: 0,
+              child: IgnorePointer( // So it doesn't block swipes
+                child: Container(
+                  width: 32,
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [Colors.black54, Colors.transparent],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         );
       case ReadingMode.tap:
         return GestureDetector(
