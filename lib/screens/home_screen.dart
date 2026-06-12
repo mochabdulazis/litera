@@ -5,6 +5,7 @@ import 'category_screen.dart';
 import 'reader_screen.dart';
 import '../models/content.dart';
 import '../widgets/ribbon_bookmark.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -26,11 +27,32 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
 
     return Scaffold(
+      extendBody: true, // Needed for curved_navigation_bar transparent background
       body: IndexedStack(
         index: _currentIndex,
         children: screens,
       ),
-      bottomNavigationBar: _buildCustomBottomNav(),
+      bottomNavigationBar: CurvedNavigationBar(
+        index: _currentIndex,
+        height: 60.0,
+        items: <Widget>[
+          _buildNavIcon(0, 'assets/icons/home'),
+          _buildNavIcon(1, 'assets/icons/cerpen'),
+          _buildNavIcon(2, 'assets/icons/puisi'),
+          _buildNavIcon(3, 'assets/icons/komik'),
+        ],
+        color: const Color(0xFF483F29), // Dark Olive Brown
+        buttonBackgroundColor: const Color(0xFF7A774A), // Accent Green
+        backgroundColor: Colors.transparent,
+        animationCurve: Curves.easeInOut,
+        animationDuration: const Duration(milliseconds: 300),
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        letIndexChange: (index) => true,
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
@@ -44,75 +66,18 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildCustomBottomNav() {
-    return Container(
-      height: 70,
-      decoration: const BoxDecoration(
-        color: Color(0xFFEFE8DA), // Matched lighter background
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavItem(0, 'Home', 'assets/icons/home'),
-          _buildNavItem(1, 'Cerpen', 'assets/icons/cerpen'),
-          _buildNavItem(2, 'Puisi', 'assets/icons/puisi'),
-          _buildNavItem(3, 'Komik', 'assets/icons/komik'),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNavItem(int index, String label, String iconPrefix) {
-    final isSelected = _currentIndex == index;
-    return GestureDetector(
-      onTap: () => setState(() => _currentIndex = index),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 350),
-        curve: Curves.easeOutCubic,
-        padding: EdgeInsets.symmetric(horizontal: isSelected ? 16 : 8, vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF483F29) : Colors.transparent,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
-              transitionBuilder: (child, animation) => FadeTransition(opacity: animation, child: child),
-              child: Image.asset(
-                isSelected ? '${iconPrefix}_active.png' : '${iconPrefix}_inactive.png',
-                key: ValueKey(isSelected ? 'active' : 'inactive'),
-                width: 24,
-                height: 24,
-                errorBuilder: (c, e, s) => Icon(
-                  index == 0 ? Icons.home : index == 1 ? Icons.menu_book : index == 2 ? Icons.history_edu : Icons.brush,
-                  key: ValueKey(isSelected ? 'icon_active' : 'icon_inactive'),
-                  color: isSelected ? Colors.white : const Color(0xFF483F29),
-                ),
-              ),
-            ),
-            AnimatedSize(
-              duration: const Duration(milliseconds: 350),
-              curve: Curves.easeOutCubic,
-              child: isSelected
-                  ? Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const SizedBox(width: 8),
-                        Text(
-                          label,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    )
-                  : const SizedBox.shrink(),
-            ),
-          ],
+  Widget _buildNavIcon(int index, String iconPrefix) {
+    // Both background and active button are dark, so we use the bright icons.
+    return Padding(
+      padding: const EdgeInsets.all(8.0), // Padding to make it fit nicely
+      child: Image.asset(
+        '${iconPrefix}_active.png',
+        width: 30,
+        height: 30,
+        errorBuilder: (c, e, s) => Icon(
+          index == 0 ? Icons.home : index == 1 ? Icons.menu_book : index == 2 ? Icons.history_edu : Icons.brush,
+          color: Colors.white,
+          size: 30,
         ),
       ),
     );
