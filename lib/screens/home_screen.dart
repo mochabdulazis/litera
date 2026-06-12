@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -117,7 +118,10 @@ class _HomeView extends StatelessWidget {
                           fraction: curvedAnimation.value,
                           center: Offset(MediaQuery.of(context).size.width - 40, 50), // Position of search icon
                         ),
-                        child: childWidget,
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+                          child: childWidget,
+                        ),
                       );
                     },
                     child: FadeTransition(
