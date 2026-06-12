@@ -58,14 +58,14 @@ class CategoryListScreen extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   content.title,
-                  style: const TextStyle(fontFamily: 'Sans-Serif', fontWeight: FontWeight.bold, color: Color(0xFF483F29)),
+                  style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF483F29)),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),
                 Text(
                   content.authorName,
-                  style: TextStyle(fontFamily: 'Sans-Serif', fontSize: 12, color: const Color(0xFF483F29).withOpacity(0.7)),
+                  style: TextStyle(fontSize: 12, color: const Color(0xFF483F29).withOpacity(0.7)),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),

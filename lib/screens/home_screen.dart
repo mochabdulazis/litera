@@ -9,6 +9,7 @@ import '../models/content.dart';
 import '../widgets/ribbon_bookmark.dart';
 import '../widgets/search_modal.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -91,9 +92,9 @@ class _HomeView extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         leading: const Icon(Icons.menu_book, color: Color(0xFF483F29)),
-        title: const Text(
+        title: Text(
           "LITERA",
-          style: TextStyle(fontFamily: 'Serif', color: Color(0xFF483F29), fontSize: 24, fontWeight: FontWeight.bold),
+          style: GoogleFonts.playfairDisplay(color: const Color(0xFF483F29), fontSize: 24, fontWeight: FontWeight.bold),
         ),
         actions: [
           IconButton(
@@ -143,9 +144,9 @@ class _HomeView extends StatelessWidget {
               padding: EdgeInsets.only(bottom: 24),
               child: _ContinueReadingFloating(key: ValueKey('continue_reading_widget')),
             ),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
-            child: Text("For You", style: TextStyle(fontFamily: 'Serif', fontSize: 22, color: Color(0xFF483F29))),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            child: Text("For You", style: GoogleFonts.playfairDisplay(fontSize: 22, color: const Color(0xFF483F29))),
           ),
           SizedBox(
             height: 300,
@@ -224,9 +225,9 @@ class _HomeView extends StatelessWidget {
             endIndent: 32,
           ),
           const SizedBox(height: 24),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
-            child: Text("Penulis Terpopuler", style: TextStyle(fontFamily: 'Serif', fontSize: 22, color: Color(0xFF483F29))),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            child: Text("Penulis Terpopuler", style: GoogleFonts.playfairDisplay(fontSize: 22, color: const Color(0xFF483F29))),
           ),
           SizedBox(
             height: 90,
